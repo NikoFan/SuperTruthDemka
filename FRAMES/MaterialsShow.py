@@ -2,7 +2,7 @@ from PySide6.QtWidgets import (QFrame, QScrollArea, QPushButton,
                                QWidget, QLabel, QVBoxLayout,
                                QHBoxLayout)
 from PySide6.QtGui import QPixmap
-from FRAMES import CreateMaterials, UpdateMaterials
+from FRAMES import CreateMaterials, UpdateMaterials, SuppliersShow
 
 class ShowMaterialsClass(QFrame):
     def __init__(self, controller):
@@ -99,6 +99,16 @@ class ShowMaterialsClass(QFrame):
             card_l.addLayout(hbox_3)
             card_l.addLayout(hbox_4)
 
+            suppliers_btn = QPushButton("Список партнеров")
+            suppliers_btn.setAccessibleName(elements['name'])
+            suppliers_btn.setObjectName("big_btn")
+
+            suppliers_btn.clicked.connect(
+                self.open_suppliers_window
+            )
+            card_l.addWidget(suppliers_btn)
+
+
             container_l.addWidget(card)
 
         scroll_area.setWidget(container)
@@ -116,6 +126,11 @@ class ShowMaterialsClass(QFrame):
     def open_update_window(self):
         sender_name = self.sender().accessibleName()
         self.controller.switch_window(UpdateMaterials.UpdateMaterialsClass,
+                                      sender_name)
+
+    def open_suppliers_window(self):
+        sender_name = self.sender().accessibleName()
+        self.controller.switch_window(SuppliersShow.ShowSuppliersClass,
                                       sender_name)
 
 

@@ -45,6 +45,12 @@ QComboBox {
 color: black;
 }
 
+
+QLabel {
+font-size: 20px;
+padding-left: 6px;
+}
+
 #Title {
 
 font-size: 30px;
@@ -59,6 +65,10 @@ background: #ABCFCE;
 
 #btn {
 border: none;
+}
+
+#big_btn {
+background: #546F94;
 }
 
 #title_btn {

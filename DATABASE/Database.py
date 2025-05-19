@@ -165,3 +165,35 @@ class Database:
         except Exception as e:
             print(e)
             return False
+
+    def take_suppliers_list(self):
+        """ Получение списка поставщиков """
+        try:
+            name = Material.get_material()
+            query = f"""
+            select s.supplier_name, s.supplier_type,
+            s.supplier_inn, s.supplier_rate, s.supplier_rate
+            from suppliers s
+            join material_suppliers ms
+            on ms.supplier_name_fk = s.supplier_name
+            where material_name_fk = '{name}';
+            """
+
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = []
+            for row in cursor.fetchall():
+                result.append(
+                    {
+                        "name":row[0],
+                        "type":row[1],
+                        "inn":row[2],
+                        "rate":row[3],
+                        "date":row[4],
+                    }
+                )
+
+            return result
+        except Exception as e:
+            print(e)
+            return []
