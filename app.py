@@ -4,8 +4,10 @@ from PySide6.QtWidgets import (QMainWindow,
 import sys
 from DATABASE.Database import Database
 
+from Messages import send_W_message
 
 
+from Material import Material
 from FRAMES import MaterialsShow
 
 class MainClass(QMainWindow):
@@ -23,9 +25,28 @@ class MainClass(QMainWindow):
 
         self.setCentralWidget(self.navigator)
 
+    def switch_window(self, frame, material_name=None):
+        """ Переход между окнами """
+        Material().set_material(material_name)
+        goal_frame = frame(self)
+        self.navigator.removeWidget(goal_frame)
+        self.navigator.addWidget(goal_frame)
+        self.navigator.setCurrentWidget(goal_frame)
+
+    def closeEvent(self, event, /):
+        if send_W_message("Вы точно хотите закрыть приложение?"):
+            event.accept()
+        else:
+            event.ignore()
+
 
 styles = """
+QComboBox {
+color: black;
+}
+
 #Title {
+
 font-size: 30px;
 font-weight: bold;
 qproperty-alignment: AlignCenter;
@@ -33,6 +54,7 @@ qproperty-alignment: AlignCenter;
 
 #card {
 border: 2px solid black;
+background: #ABCFCE;
 }
 
 #btn {
@@ -43,6 +65,16 @@ border: none;
 border: none;
 font-size: 22px;
 font-weight: bold;
+}
+
+#label_hint {
+padding-left: 10px;
+}
+
+
+#edit_hint {
+font-size: 20px;
+padding: 10px;
 }
 """
 

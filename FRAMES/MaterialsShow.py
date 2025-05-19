@@ -2,6 +2,7 @@ from PySide6.QtWidgets import (QFrame, QScrollArea, QPushButton,
                                QWidget, QLabel, QVBoxLayout,
                                QHBoxLayout)
 from PySide6.QtGui import QPixmap
+from FRAMES import CreateMaterials, UpdateMaterials
 
 class ShowMaterialsClass(QFrame):
     def __init__(self, controller):
@@ -103,10 +104,19 @@ class ShowMaterialsClass(QFrame):
         scroll_area.setWidget(container)
         self.layout.addWidget(scroll_area)
 
+        create_material_btn = QPushButton("Создать материал")
+        create_material_btn.setObjectName("big_btn")
+        create_material_btn.clicked.connect(
+            lambda : self.controller.switch_window(CreateMaterials.CreateMaterialsClass)
+        )
+
+        self.layout.addWidget(create_material_btn)
+
 
     def open_update_window(self):
         sender_name = self.sender().accessibleName()
-        print(sender_name)
+        self.controller.switch_window(UpdateMaterials.UpdateMaterialsClass,
+                                      sender_name)
 
 
     def set_picture(self):
