@@ -65,6 +65,7 @@ background: #ABCFCE;
 
 #btn {
 border: none;
+background: red;
 }
 
 #big_btn {
