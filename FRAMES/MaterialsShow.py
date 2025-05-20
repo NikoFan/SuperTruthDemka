@@ -3,6 +3,8 @@ from PySide6.QtWidgets import (QFrame, QScrollArea, QPushButton,
                                QHBoxLayout)
 from PySide6.QtGui import QPixmap
 from FRAMES import CreateMaterials, UpdateMaterials, SuppliersShow
+import math
+
 
 class ShowMaterialsClass(QFrame):
     def __init__(self, controller):
@@ -31,7 +33,6 @@ class ShowMaterialsClass(QFrame):
             card.setObjectName("card")
             card_l = QVBoxLayout(card)
 
-
             # Создание кнопки Тип / Наименование
             hbox_1 = QHBoxLayout()
             title_btn = QPushButton(f"{elements['type']} | {elements['name']}")
@@ -44,20 +45,23 @@ class ShowMaterialsClass(QFrame):
             hbox_1.addWidget(title_btn)
             hbox_1.addStretch()
 
-            fin_count = elements['min_count']
-            if int(elements['min_count']) > int(elements['count']):
-                fin_count = int(elements['count']) - int(elements['min_count'])
+            fin_cost = "0,00"
+            if float(elements['min_count']) > float(elements['count']):
+                min_count_minus_all = float(elements['min_count']) - float(elements['count'])  # Разница
+                paket_count = math.ceil(min_count_minus_all / float(elements['size']))  # Округленное значение пачек
+                items_count = paket_count * float(elements['size'])  # Количество товара
+                fin_cost = items_count * float(elements['cost'])
 
             # Создание кнопки Минимальное количество
             hbox_2 = QHBoxLayout()
-            min_btn = QPushButton(f"Минимальное количество: {fin_count} {elements['edinica']}")
+            min_btn = QPushButton(f"Минимальное количество: {elements['min_count']} {elements['edinica']}")
             min_btn.setObjectName("btn")
             min_btn.setAccessibleName(elements['name'])
             min_btn.clicked.connect(
                 self.open_update_window
             )
 
-            cost_btn = QPushButton(f"Стоимость партии: {round(abs(float(elements['cost']) * fin_count), 2)}р")
+            cost_btn = QPushButton(f"Стоимость партии: {fin_cost} р")
             cost_btn.setObjectName("btn")
             cost_btn.setAccessibleName(elements['name'])
             cost_btn.clicked.connect(
@@ -108,7 +112,6 @@ class ShowMaterialsClass(QFrame):
             )
             card_l.addWidget(suppliers_btn)
 
-
             container_l.addWidget(card)
 
         scroll_area.setWidget(container)
@@ -117,11 +120,10 @@ class ShowMaterialsClass(QFrame):
         create_material_btn = QPushButton("Создать материал")
         create_material_btn.setObjectName("big_btn")
         create_material_btn.clicked.connect(
-            lambda : self.controller.switch_window(CreateMaterials.CreateMaterialsClass)
+            lambda: self.controller.switch_window(CreateMaterials.CreateMaterialsClass)
         )
 
         self.layout.addWidget(create_material_btn)
-
 
     def open_update_window(self):
         sender_name = self.sender().accessibleName()
@@ -132,7 +134,6 @@ class ShowMaterialsClass(QFrame):
         sender_name = self.sender().accessibleName()
         self.controller.switch_window(SuppliersShow.ShowSuppliersClass,
                                       sender_name)
-
 
     def set_picture(self):
         """ Установка фотографии """
